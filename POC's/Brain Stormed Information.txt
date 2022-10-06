@@ -24,3 +24,21 @@ Coverage:- All kinds of assets including stocks, forex, crypto, ETFs, indices. E
 Professional:- Solutions and tools that help customers to focus on product development and stop thinking about the data sources.
 Affordability:- Data should be available for everyone and for every need, therefore we offer the most generous free plan in the industry with options to increase the limits.
 
+
+Optional Top 3 Stocks from each Sectors
+1. Technology & IT
+1.1 Apple (AAPL)
+1.2 Alphabet (GOOG)
+1.3 Meta platforms (META)
+2. Bank & Financial Institutions
+2.1 Royal Bank of Canada
+2.2 Bank of Nova Scotia
+2.3 Bank of Montreal
+3. Manufacturing
+3.1 Taiwan semiconductor manufacturing (TSM)
+3.2 Nvidia (NVDA)
+3.3 Texas Instruments (TXN)
+4. Product Based Service
+4.1 Oracle (ORCL)
+4.2 Cisco (CSCO)
+4.3 Verizon Communications (VZ)
