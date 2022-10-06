@@ -1,0 +1,26 @@
+1.yfinance
+
+The API has multiple endpoints that provide data such as:
+
+Financials
+Options
+Analysis
+Historical Data
+Statistics
+Charts
+Newfeeds
+Timeseries
+Balance Sheets
+
+2.Alpha Vantage
+Alpha Vantage provides a API service for realtime and historical data on stocks, forex (FX), and digital/cryptocurrencies. 
+
+3. Twelve Data
+The Twelve Data API provides financial data for developers to enter the world markets. Instant access for real-time and historical data of stocks, forex, crypto, ETFs, indices, and more.
+
+Twelve Data is the fastest-growing company in the financial data industry based on 3 simple postulates:
+
+Coverage:- All kinds of assets including stocks, forex, crypto, ETFs, indices. Equity data is available from all 5 continents, in real-time and historical retrospective.
+Professional:- Solutions and tools that help customers to focus on product development and stop thinking about the data sources.
+Affordability:- Data should be available for everyone and for every need, therefore we offer the most generous free plan in the industry with options to increase the limits.
+
