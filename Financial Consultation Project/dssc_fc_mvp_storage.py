@@ -4,8 +4,10 @@
 # The storage we have used in this Amazon Web Services S3 \
 # it's a simple cloud storage that provides object storage through a web service interface
 
-
+import datetime
+from datetime import date
 from io import BytesIO
+import yfinance as yfin
 import boto3
 import pandas as pd
 import os
@@ -58,6 +60,25 @@ class S3DatabaseActions:
         return read_file_csv
 
     # This function will pull the data for a particular ticker symbol
+
+
+class YfinanceDataRequest:
+    # Given this method below is executed
+    # When we need the latest stock data
+    # Then the latest stock information is pulled in .csv format using the yfinance library
+    @staticmethod
+    def pull_latest_stock_data(company_name):
+        current_date = datetime.datetime.now()
+        stock_data = yfin.download(company_name,
+                                   start="2020-11-01",
+                                   end=current_date,
+                                   interval='1h')
+
+        stock_data['DateTime'] = stock_data.index
+        stock_data.set_index('DateTime',
+                             inplace=True)
+
+        return stock_data
 
 
 # This class here initializes all the services for the start of the project
