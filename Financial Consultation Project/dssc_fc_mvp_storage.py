@@ -10,7 +10,6 @@ from io import BytesIO
 import yfinance as yfin
 import boto3
 import pandas as pd
-import os
 import json
 import os
 
@@ -41,20 +40,15 @@ class S3DatabaseActions:
     # This method below will browse through the directory in the local system and \
     # update the S3 database
     @staticmethod
-    def update_s3_database(file, file_name):
-
-        file.to_csv("temp_files\\"+file_name)
-        os.chdir("temp_files\\")
+    def update_s3_database():
         for files in os.listdir():
-            print(files)
             upload_file_bucket = storage_config['aws_bucket_name']
             upload_file_key = storage_config['aws_bucket_test_folder']
-            s3_client.upload_file(files, upload_file_bucket, 'test_check_upload/{}'.format(file_name))
-            Create_Local_Files.remove_local_data_set_files()
+            s3_client.upload_file(files, upload_file_bucket, 'test_check_upload/{}'.format(files))
 
     @staticmethod
-    def update_files_to_latest_data(company_name):
-        latest_file = YfinanceDataRequest.pull_latest_stock_data(company_name)
+    def update_files_to_latest_data(company_name, company_stock_name):
+        latest_file = YfinanceDataRequest.pull_latest_stock_data(company_stock_name)
         existing_file = S3DatabaseActions.fetch_file_from_s3_database(company_name)
 
         # This part of code is done, because some old files retained "Unnamed: 0" for "DateTime" column
@@ -62,8 +56,8 @@ class S3DatabaseActions:
             existing_file.rename(columns={'Unnamed: 0': 'DateTime'}, inplace=True)
 
         updated_file = pd.concat((existing_file, latest_file), axis=0)
-
-        return updated_file, company_name+"_data.csv"
+        updated_file.to_csv("temp_files\\" + company_name + "_data.csv")
+        return company_name
 
     # This method below will get the csv file for a specific company from S3 database
     @staticmethod
@@ -131,8 +125,13 @@ class Create_Local_Files:
             os.mkdir('temp_files')
             print('Temp files have been created')
 
+    # This method is used to remove the temporary files that were created during the data set upload process
     @staticmethod
     def remove_local_data_set_files():
         for files in os.listdir():
             os.remove(files)
 
+    # This method is used to change the os directory
+    @staticmethod
+    def change_dir_for_upload():
+        os.chdir('temp_files')
