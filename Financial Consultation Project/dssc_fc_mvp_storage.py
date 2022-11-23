@@ -5,13 +5,14 @@
 # it's a simple cloud storage that provides object storage through a web service interface
 
 import datetime
-from datetime import date
+from datetime import timedelta
 from io import BytesIO
 import yfinance as yfin
 import boto3
 import pandas as pd
 import os
 import json
+import os
 
 # Maintain a global instance of the configuration file
 storage_config = None
@@ -40,13 +41,29 @@ class S3DatabaseActions:
     # This method below will browse through the directory in the local system and \
     # update the S3 database
     @staticmethod
-    def update_s3_database():
-        for file in os.listdir():
+    def update_s3_database(file, file_name):
+
+        file.to_csv("temp_files\\"+file_name)
+        os.chdir("temp_files\\")
+        for files in os.listdir():
+            print(files)
             upload_file_bucket = storage_config['aws_bucket_name']
-            upload_file_key = storage_config['aws_bucket_sub_folder_1']
-            s3_client.upload_file(file,
-                                  upload_file_bucket,
-                                  upload_file_key)
+            upload_file_key = storage_config['aws_bucket_test_folder']
+            s3_client.upload_file(files, upload_file_bucket, 'test_check_upload/{}'.format(file_name))
+            Create_Local_Files.remove_local_data_set_files()
+
+    @staticmethod
+    def update_files_to_latest_data(company_name):
+        latest_file = YfinanceDataRequest.pull_latest_stock_data(company_name)
+        existing_file = S3DatabaseActions.fetch_file_from_s3_database(company_name)
+
+        # This part of code is done, because some old files retained "Unnamed: 0" for "DateTime" column
+        if "Unnamed: 0" in existing_file.columns:
+            existing_file.rename(columns={'Unnamed: 0': 'DateTime'}, inplace=True)
+
+        updated_file = pd.concat((existing_file, latest_file), axis=0)
+
+        return updated_file, company_name+"_data.csv"
 
     # This method below will get the csv file for a specific company from S3 database
     @staticmethod
@@ -68,9 +85,14 @@ class YfinanceDataRequest:
     # Then the latest stock information is pulled in .csv format using the yfinance library
     @staticmethod
     def pull_latest_stock_data(company_name):
-        current_date = datetime.datetime.now()
+        current_date = datetime.datetime.today().strftime('%Y-%m-%d')
+
+        # To derive data from yahoo finance for every one hour, the start and the end date must be between
+        # 730 days from the current date
+        start_date = (datetime.datetime.today() - timedelta(days=720)).strftime('%Y-%m-%d')
+
         stock_data = yfin.download(company_name,
-                                   start="2020-11-01",
+                                   start="2022-10-13",
                                    end=current_date,
                                    interval='1h')
 
@@ -95,3 +117,22 @@ class InitializeDSSCService:
 
         # Run the client authentication method
         ConnectToS3DataBase.client_connection_authentication()
+
+
+# This class check if the local temporary files are created
+class Create_Local_Files:
+
+    # This method is used to create a temporary local file that will be used when we upload the files to s3 database
+    @staticmethod
+    def create_local_file():
+        if os.path.exists('temp_files'):
+            return True
+        else:
+            os.mkdir('temp_files')
+            print('Temp files have been created')
+
+    @staticmethod
+    def remove_local_data_set_files():
+        for files in os.listdir():
+            os.remove(files)
+
