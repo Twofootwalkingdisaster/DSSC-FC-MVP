@@ -86,7 +86,7 @@ class YfinanceDataRequest:
         start_date = (datetime.datetime.today() - timedelta(days=720)).strftime('%Y-%m-%d')
 
         stock_data = yfin.download(company_name,
-                                   start="2022-10-13",
+                                   start=start_date,
                                    end=current_date,
                                    interval='1h')
 

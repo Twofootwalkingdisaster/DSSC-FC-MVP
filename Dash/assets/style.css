@@ -1,0 +1,70 @@
+body {
+  background-color:blue;
+  margin: 0;
+  padding: 0;
+}
+
+#header-title {
+  border: double;
+  border-width: 12px;
+  text-align: center;
+}
+#header-description {
+  text-align: center;
+  font-weight: bold;
+  text-decoration: underline;
+  font-size: x-large;
+}
+#company-filter {
+  width: 280%;
+}
+.menu-title-1 {
+  font-weight: bold;
+  display: inline-flex;
+  font-size: large;
+  width: 24%;
+}
+.menu-title-2 {
+  font-weight: bold;
+  display: inline-flex;
+}
+#menu-area-1 {
+  text-align: center;
+}
+#menu-area-2 {
+  text-align: center;
+  padding-top: 1%;
+}
+
+#graph-container-1 {
+  justify-content: center;
+  padding-top: 1%;
+  width: 100%;
+  display: inline-flex;
+}
+#graph-container-2 {
+  justify-content: center;
+  padding-top: 1%;
+  width: 100%;
+  display: inline-flex;
+}
+#graph-container-3 {
+  justify-content: center;
+  padding-top: 1%;
+  width: 100%;
+  display: inline-flex;
+}
+
+#price-chart-1 {
+  width: 45%;
+}
+#price-chart-future-1 {
+  margin-left: 10px;
+  width: 45%;
+}
+#price-chart-2 {
+  width: 45%;
+}
+#price-chart-3 {
+  width: 45%;
+}
