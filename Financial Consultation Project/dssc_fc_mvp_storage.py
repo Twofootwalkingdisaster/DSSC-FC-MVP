@@ -12,6 +12,7 @@ import boto3
 import pandas as pd
 import json
 import os
+from dssc_fc_mvp_utilities import Utilities
 
 # Maintain a global instance of the configuration file
 storage_config = None
@@ -49,14 +50,18 @@ class S3DatabaseActions:
     @staticmethod
     def update_files_to_latest_data(company_name, company_stock_name):
         latest_file = YfinanceDataRequest.pull_latest_stock_data(company_stock_name)
+        latest_file.reset_index(inplace=True)
+        latest_file['DateTime'] = latest_file['DateTime'].apply(Utilities.change_time_format_from_timestamp)
         existing_file = S3DatabaseActions.fetch_file_from_s3_database(company_name)
 
         # This part of code is done, because some old files retained "Unnamed: 0" for "DateTime" column
-        if "Unnamed: 0" in existing_file.columns:
+        if "Unnamed: 0" in existing_file.columns or "":
             existing_file.rename(columns={'Unnamed: 0': 'DateTime'}, inplace=True)
+            temp = pd.to_datetime(existing_file['DateTime'])
+            existing_file['DateTime'] = temp.apply(Utilities.change_time_format_from_timestamp)
 
-        updated_file = pd.concat((existing_file, latest_file), axis=0)
-        updated_file.to_csv("temp_files\\" + company_name + "_data.csv")
+        updated_file = pd.concat((existing_file, latest_file), axis=0, ignore_index=True)
+        updated_file.to_csv("temp_files\\" + company_name + "_data.csv", index=False)
         return company_name
 
     # This method below will get the csv file for a specific company from S3 database
@@ -83,10 +88,10 @@ class YfinanceDataRequest:
 
         # To derive data from yahoo finance for every one hour, the start and the end date must be between
         # 730 days from the current date
-        start_date = (datetime.datetime.today() - timedelta(days=720)).strftime('%Y-%m-%d')
+        start_date = (datetime.datetime.today() - timedelta(days=2)).strftime('%Y-%m-%d')
 
         stock_data = yfin.download(company_name,
-                                   start=start_date,
+                                   start="2022-10-13",
                                    end=current_date,
                                    interval='1h')
 

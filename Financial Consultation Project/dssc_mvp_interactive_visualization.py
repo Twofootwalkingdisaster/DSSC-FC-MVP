@@ -4,14 +4,14 @@ from dash import dcc
 from dash.dependencies import Input, Output
 import plotly.express as px
 import pandas as pd
-from Storage import GetFile
+# from Storage import GetFile
 import plotly.graph_objs as go
 
 company_name = ['Alphabet', 'Apple', 'BMO', 'Cisco', 'IBM', 'Meta', 'Microsoft', 'Nvidia', 'Oracle', 'RBC', 'Scotia',
                 'TSM', 'TXN', 'VZ']
 
-data = GetFile.get_file("Alphabet")
-data.rename(columns={"Unnamed: 0": "DateTime"}, inplace=True)
+data = pd.read_csv("temp_files\\Alphabet_data.csv")
+#data.rename(columns={"Unnamed: 0": "DateTime"}, inplace=True)
 data[['Date', 'Time']] = data.DateTime.str.split(" ", expand=True)
 data['Date'] = pd.to_datetime(data['Date'], format='%Y-%m-%d')
 
