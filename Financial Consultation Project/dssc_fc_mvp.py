@@ -17,7 +17,6 @@ def update_stock_data_daily():
 
     storage_information.Create_Local_Files.change_dir_for_upload()
     storage_information.S3DatabaseActions.update_s3_database()
-    storage_information.Create_Local_Files.remove_local_data_set_files()
 
 
 # The main start point of the project is this function
